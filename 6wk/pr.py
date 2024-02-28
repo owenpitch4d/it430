@@ -1,4 +1,5 @@
-def showpkts_IP(data):
+
+def showpkts_ARP(data):
     data = data[24:] #Get rid of global header
     
     while(data):
@@ -13,33 +14,40 @@ def showpkts_IP(data):
         
         #Turn only that packet to hex
         tempData = ([f"{i:02x}" for i in data[0:pkt_len]])
-        
-        print("Dst-MAC=", getAdr(tempData))
+        dst_mac = getAdr(tempData)
+        tempData= tempData[6:]            
+        src_mac = getAdr(tempData)
         tempData= tempData[6:]
-        print("Src-MAC=", getAdr(tempData))
-        tempData= tempData[8:]
-        
-        verIHL= tempData[0]
-        IHL = int(verIHL, 16)%16
-        print("IHL=", IHL)
+
+        typey = tempData[0] + tempData[1]
+
+        if(typey != "0806"):
+            data = data[pkt_len:]
+            continue
+
+        print("===")
+        print("Dst-MAC=", dst_mac)
+        print("Src-MAC=", src_mac)
+        tempData = tempData[8:]
+
+        opcode = tempData[1][1]
+
+        print("Opcode=", opcode)
         tempData = tempData[2:]
 
-        totalLength = int(tempData[0]+tempData[1], 16)
-        print("Total Length=", totalLength) 
-        tempData = tempData[2:]
-        
-        #junk    
-        tempData = tempData[5:]
-        protocol = int(tempData[0], 16)
-        tempData = tempData[3:]
-
-        print("Src-IP=", getIP(tempData))
+        print("Sender-HW-Addr=", getAdr(tempData))
+        tempData= tempData[6:]
+        print("Sender-Prot-Addr=", getIP(tempData))
         tempData = tempData[4:]
-        print("Dst-IP=", getIP(tempData))
+        print("Target-HW-Addr=", getAdr(tempData))
+        tempData= tempData[6:]
+        print("Target-Prot-Addr=", getIP(tempData))
         tempData = tempData[4:]
+        #getData(tempData[:totalLength - (IHL*4)])
         
-        getData(tempData[:totalLength - (IHL*4)])
+        
         data = data[pkt_len:]
+        print("===")
         print('')
 
 def getData(bigData):
@@ -118,7 +126,3 @@ def showpkts_TCP(data, ip1, ip2):
         
         data = data[pkt_len:]
     
-
-#data = open("udp.pcap", "rb").read()
-#showpkts_IP(data)
-#showpkts_TCP(data, "192.168.172.4", "192.168.172.5")

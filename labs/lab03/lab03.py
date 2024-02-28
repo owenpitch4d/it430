@@ -66,7 +66,7 @@ def showpkts_Eth(data):
         data = data[pkt_len:]
         print("\n")
     
-def getAdr(data2):
+def getAdr(data):
     dstMac = ""
     for index, element in enumerate(data[0:6], start = 1):
         dstMac += element
