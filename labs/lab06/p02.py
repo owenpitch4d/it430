@@ -21,7 +21,7 @@ ACK_number = 0
 tcp_header = struct.pack(">HHII", src_port, 9000, sequence_number, ACK_number)
 tcp_header += b'\x50\x02\xfa\xf0' #data offset, SYN flag, window size
 
-src_ip = struct.pack(">BBBB", 192, 168, 172, 6) #source ip
+src_ip = struct.pack(">BBBB", 192, 168, 172, 4) #source ip
 dst_ip = struct.pack(">BBBB", 192, 168, 172, 5) #dest
 
 chksum = calc_checksum(src_ip + dst_ip + struct.pack(">BBH", 0, 6, 20) + tcp_header)
@@ -35,7 +35,7 @@ total_length = 20 + len(tcp_header)
 ip_header = struct.pack(">BBH", version_ihl, type_of_service, total_length)
 ip_header += struct.pack(">HH", 12345, 0)
 ttl = 20
-protocol = 17
+protocol = 6
 checksum = 0
 ip_header += struct.pack(">BBH", ttl, protocol, checksum)
 ip_header += src_ip

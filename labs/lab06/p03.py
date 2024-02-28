@@ -35,7 +35,7 @@ total_length = 20 + len(tcp_header)
 ip_header = struct.pack(">BBH", version_ihl, type_of_service, total_length)
 ip_header += struct.pack(">HH", 12345, 0)
 ttl = 20
-protocol = 17
+protocol = 6
 checksum = 0
 ip_header += struct.pack(">BBH", ttl, protocol, checksum)
 ip_header += src_ip
@@ -44,4 +44,4 @@ ip_header += dst_ip
 ip_pkt = ip_header + tcp_header
 
 addr = ("192.168.172.5", 9000)
-raw_socket.sendto(ip_pkt, add
+raw_socket.sendto(ip_pkt, addr)
