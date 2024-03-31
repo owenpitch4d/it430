@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# p03.py
+
 import struct
 import random
 from socket import *
