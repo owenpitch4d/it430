@@ -20,9 +20,9 @@ project.part5("prj_cbc.bin")
 project.part5("prj_ctr.bin")
 
 
-project.decrypt_ecb("prj_ecb.bin", "prj_dec.bmp", key)
+project.decrypt_ecb("prj_ecb.bin", "prj_dec1.bmp", key)
 project.fix_bmp_header("pic_original.bmp", "prj_ecb.bin", "prj_ecb.bmp")
 
-project.decrypt_cbc("prj_cbc.bin", "prj_cbc_dec.bmp", key, iv)
+project.decrypt_cbc("prj_cbc.bin", "prj_cbc_dec1.bmp", key, iv)
 
-project.decrypt_ctr("prj_ctr.bin", "prj_ctr_dec.bmp", key, ctr)
+project.decrypt_ctr("prj_ctr.bin", "prj_ctr_dec1.bmp", key, ctr)

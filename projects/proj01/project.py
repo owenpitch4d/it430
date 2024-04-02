@@ -125,24 +125,47 @@ def part4(pt, ct, target):
     ct = int.from_bytes(bytes.fromhex(ct), 'little')
     t = int.from_bytes(bytes.fromhex(target), 'little')
 
-    #key = (pt^ct).to_bytes(max(sys.getsizeof(pt), sys.getsizeof(ct)), 'little')
     key = (pt^ct)
 
     m = (t^key).to_bytes(max(sys.getsizeof(t), sys.getsizeof(key)), 'little')
 
     return m.decode()
 
-def part5(in_cipher_file):
+def part6(in_cipher_file):
     with open(in_cipher_file, "rb") as f:
         cipher_text = f.read()
     
-    cipher_text = bytearray(cipher_text)
-    cipher_text[70] = 0
-
-
+    corrupt_text = bytearray(cipher_text)
+    corrupt_text[70] = 0
+    
     with open(in_cipher_file, "wb") as f:
-        f.write(cipher_text)
+        f.write(corrupt_text)
 
     return in_cipher_file
     
+
+def part5(iv1, iv2):
+    yes = int.from_bytes(pad(b'Yes', 16), "big") #pad yes message and convert to int
+    no = int.from_bytes(pad(b'No', 16), "big") #pad no messasge and convert to int
+
+    #convert IVs to int
+    iv1 = int(iv1, 16)
+    iv2 = int(iv2, 16)
+
+    #xor pt with original iv to get what went into encryption box
+    yes = yes^iv1
+    no = no^iv1
+
+    #get m1 by xor with new iv
+    m1_yes = hex(yes^iv2)        
+    m1_no = hex(no^iv2)        
+    
+    print("manipulated yes = " + m1_yes)
+    print("manipulated no = " + m1_no)
+
+iv1 = "890cc7d758854e4c2339e490bf31b4c4"
+#iv2 = "461042508b8152abac76f4ce802e64df"
+iv2 = "3666689ef678a1bb09b4bc0a7103bf72"
+part5(iv1, iv2)
+
 
